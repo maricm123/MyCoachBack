@@ -37,17 +37,16 @@ class CustomUserManager(BaseUserManager):
 class User(
     AbstractUser
 ):
+
     email = models.CharField(max_length=80, unique=True)
     username = models.CharField(max_length=45)
+    is_client = models.BooleanField(default=False)
+    is_coach = models.BooleanField(default=False)
     
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"  # used as the unique identifier
     REQUIRED_FIELDS = []  # a list of the field names that will be prompted with createsuperuser
 
     def __str__(self):
-        return self.username
-
-    
-
+        return self.email

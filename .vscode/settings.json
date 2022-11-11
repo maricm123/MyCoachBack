@@ -1,4 +1,5 @@
 {
+    "python.pythonPath": "mycoachbackenv\\Scripts\\python.exe"
     // "editor.formatOnSave": true,
     // "python.pythonPath": "mycoachbackenv\\Scripts\\python.exe",
     // "python.sortImports.args": [
