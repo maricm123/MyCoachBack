@@ -7,7 +7,7 @@ app_name = "config"
 root_urlpatterns = [
     path("api_coafro/", include("apis.api_coafro.urls", namespace="api_coafro")),
     path("admin/", admin.site.urls, name="admin"),  # Admin
-    
+    path("cd/", include("coach_dashboard.urls", namespace="cd")),  # Back Office
 
 ]
 

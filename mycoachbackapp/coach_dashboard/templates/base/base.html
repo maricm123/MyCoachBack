@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% block additional_meta %}{% endblock %}
+
+        <title>
+            {% block title %}
+                Coach dashboard
+            {% endblock title %}
+        </title>
+
+        <!-- Classic favicon -->
+        <link rel="shortcut icon"
+            href="{% static 'favicons/favicon.ico' %}"/>
+        <!-- For Chrome for Android: -->
+        <link rel="icon" sizes="192x192"
+            href="{% static 'favicons/android-chrome-192x192.png' %}">
+        <!-- For iPhone 6 Plus with @3× display: -->
+        <link rel="apple-touch-icon" sizes="180x180"
+            href="{% static 'favicons/apple-touch-icon-180x180.png' %}">
+        <!-- For iPad with @2× display running iOS ≥ 7: -->
+        <link rel="apple-touch-icon" sizes="152x152"
+            href="{% static 'favicons/apple-touch-icon-152x152.png' %}">
+        <!-- For iPhone with @2× display running iOS ≥ 7: -->
+        <link rel="apple-touch-icon" sizes="120x120"
+            href="{% static 'favicons/apple-touch-icon-120x120.png' %}">
+        <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+        <link rel="apple-touch-icon" sizes="76x76"
+            href="{% static 'favicons/apple-touch-icon-76x76.png' %}">
+        <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+        <link rel="apple-touch-icon"
+            href="{% static 'favicons/apple-touch-icon.png' %}"> <!-- 57×57px -->
+
+        {% block css %}
+            {# Bootstrap core CSS #}
+            <link rel="stylesheet"
+                href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                crossorigin="anonymous">
+            {# Font Awesome CSS #}
+            <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+                rel="stylesheet"
+                integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+                crossorigin="anonymous">
+            {# selectize CSS #}
+            <link rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"/>
+        {% endblock css %}
+    </head>
+
+    <body>
+
+        {% block javascript %}
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+            <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
+            <script src="https://unpkg.com/htmx.org@1.6.1" integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW" crossorigin="anonymous"></script>
+        {% endblock javascript %}
+
+        {% block content %}
+            {# To be override #}
+        {% endblock content %}
+
+
+        {# WARN: does it really affect performance? #}
+        {# Done at the end of the document #}
+        <script type="text/javascript">
+            $("[data-toggle=popover]").popover();
+            $("[data-toggle=tooltip]").tooltip();
+        </script>
+
+
+    </body>
+</html>

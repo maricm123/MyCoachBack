@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "djoser",
+    "bulma",
     "profiles.apps.ProfilesConfig",
     'trainingProgram.apps.TrainingprogramConfig',
 ]
@@ -53,7 +54,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            Path(BASE_DIR, "coach_dashboard/templates"),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -143,3 +146,10 @@ REST_FRAMEWORK = {
     # 'rest_framework.permissions.IsAuthenticated',
 ]
 }
+
+
+
+# LOGIN 
+
+LOGIN_REDIRECT_URL = 'cd:coach'
+LOGIN_URL = 'cd:coachlogin'
