@@ -1,2 +1,7 @@
-
+{% if user.is_authenticated %}
+  Hi {{ user }}!
+  <p><a href="{% url 'cd:logout' %}">Log Out</a></p>
+{% endif %}
 <h1>ASDASDAS </h1>
+
+

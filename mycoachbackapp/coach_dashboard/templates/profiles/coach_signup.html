@@ -1,36 +1,17 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Singup{% endblock title %} 
 
-{% block body %}
+{% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="clo-12">
-            <div class="alert alert-info">this is Singup page</div>
+    <h4>Create coach account</h4>
 
-            {% comment %} <a href="{% url 'home' %}" class="btn btn-primary mt-3">Home</a>
-            <a href="{% url 'login' %}" class="btn btn-primary mt-3">Login</a> {% endcomment %}
+    <form method="post">
 
-            <br>
-            <form method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                <p>
-                    {{ field.label_tag }}<br>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <small style="color: green">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        </p><p style="color: red">{{ error }}</p>
-                    {% endfor %}
-                <p></p>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary mt-3">Sign up </button>
-            </form>
-        </div>
-    </div>
-</div>
+        {% csrf_token %}
+        {{ form.as_p }}
 
-{% endblock body %}
+        <button class="btn btn-success" type="submit">Submit</button>
+
+    </form>
+
+{% endblock content %}

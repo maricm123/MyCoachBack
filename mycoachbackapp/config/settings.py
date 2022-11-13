@@ -19,6 +19,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+]
 
 # Application definition
 
@@ -153,3 +156,4 @@ REST_FRAMEWORK = {
 
 LOGIN_REDIRECT_URL = 'cd:coach'
 LOGIN_URL = 'cd:coachlogin'
+LOGOUT_REDIRECT_URL = "cd:coachlogin"

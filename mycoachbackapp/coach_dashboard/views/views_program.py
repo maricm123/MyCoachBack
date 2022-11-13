@@ -22,5 +22,11 @@ class CoachDashboard(ListView):
     context_object_name = 'coach'
     template_name='programs/dashboard.html'
 
-    def get_queryset(self):
-        pass
+    # def get_queryset(self):
+    #     return Coach.objects.get(request.user)
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context[""] = 
+    #     return context
+    
