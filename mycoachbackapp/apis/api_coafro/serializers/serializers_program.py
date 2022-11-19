@@ -16,7 +16,12 @@ class ProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ['name', 'price', 'date_created', 'modified_at', 'category', 'coach']
+        fields = ['id', 'name', 'price', 'category', 'coach', 'date_created', 'modified_at']
+        read_only_fields = (
+            'coach',
+            'date_created',
+            'modified_at'
+        )
 
 
         

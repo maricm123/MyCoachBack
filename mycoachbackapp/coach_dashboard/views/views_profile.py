@@ -33,8 +33,6 @@ class CoachSignUp(GuestOnlyView, FormView):
 		request = self.request
 		user = form.save(commit=False)
 
-		coach = Coach
-
 		# if settings.DISABLE_USERNAME:
 		# 	# Set a temporary username
 		# 	user.username = get_random_string()
@@ -76,7 +74,8 @@ class CoachSignUp(GuestOnlyView, FormView):
 		# 	messages.success(request, _('You are successfully signed up!'))
 
 		return redirect('cd:coachlogin')
-
+	   
+	   
 class CoachLogin(GuestOnlyView, FormView):
 	template_name = "profiles/coach_login.html"
 

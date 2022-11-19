@@ -1,9 +1,11 @@
 from profiles.models.user import User
 from profiles.models.client import Client
 from profiles.models.coach import Coach
-
+# from rest_framework_jwt.settings import api_settings
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import update_last_login
 
 from rest_framework import serializers
 
@@ -21,56 +23,124 @@ class CoachSerializer(serializers.ModelSerializer):
         fields = ['id', 'biography', 'user']
 
 class CoachSingUpSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
+    password2=serializers.CharField(style={"input_type":"password"}, write_only=True)
            
     class Meta:
-        model = Coach
-        fields = ("user", "biography")
+        model = User
+        fields=['username','email','password', 'password2']
+        extra_kwargs={
+            'password':{'write_only':True}
+        }
 
-    def validate(self, attrs):
-        # email_exists = User.objects.filter(email=attrs['email']).exists()
-        # print(email_exists)
-        
-        # if email_exists:
-        #     raise ValidationError("Email has already been used")
-
-        return super().validate(attrs)
-
-    def create(self, validated_data):
-        user_data = validated_data.pop("user")
-        print(user_data)
-        coach = Coach.objects.create(**validated_data)
-        print(coach)
-        User.objects.create(coach=coach, **user_data)
-        return coach
+    def save(self, **kwargs):
+        user=User(
+            username=self.validated_data['username'],
+            email=self.validated_data['email']
+        )
+        password=self.validated_data['password']
+        password2=self.validated_data['password2']
+        if password !=password2:
+            raise serializers.ValidationError({"error":"password do not match"})
+        user.set_password(password)
+        user.is_coach=True
+        user.save()
+        Coach.objects.create(user=user)
+        return user
 
 class ClientSingUpSerializer(serializers.ModelSerializer):
-    pass
-    # email = serializers.CharField(max_length = 80)
-    # username = serializers.CharField()
-    # password = serializers.CharField(write_only = True)
+    password2=serializers.CharField(style={"input_type":"password"}, write_only=True)
            
-    # class Meta:
-    #     model = User
-    #     fields = ("email", "username", "password")
+    class Meta:
+        model = User
+        fields=['username','email','password', 'password2']
+        extra_kwargs={
+            'password':{'write_only':True}
+        }
 
-    # def validate(self, attrs):
-    #     email_exists = User.objects.filter(email=attrs['email']).exists()
+    def save(self, **kwargs):
+        user=User(
+            username=self.validated_data['username'],
+            email=self.validated_data['email']
+        )
+        password=self.validated_data['password']
+        password2=self.validated_data['password2']
+        if password !=password2:
+            raise serializers.ValidationError({"error":"password do not match"})
+        user.set_password(password)
+        user.is_client=True
+        user.save()
+        Client.objects.create(user=user)
+        return user
+
+# JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
+# JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
+
+class CoachLoginSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=128, write_only=True)
+    token = serializers.CharField(max_length=255, read_only=True)
+
+    def validate(self, data):
+        email = data.get("email", None)
+        password = data.get("password", None)
+        user = authenticate(email=email, password=password)
+        if user is None:
+            raise serializers.ValidationError(
+                'A user with this email and password is not found.'
+            )
+
+        if user.is_coach is False:
+            raise serializers.ValidationError(
+                'You are not registered coach'
+            )
         
-    #     if email_exists:
-    #         raise ValidationError("Email has already been used")
+        
+        try:
+            # payload = JWT_PAYLOAD_HANDLER(user)
+            # jwt_token = JWT_ENCODE_HANDLER(payload)
+            update_last_login(None, user)
+        except User.DoesNotExist:
+            raise serializers.ValidationError(
+                'User with given email and password does not exists'
+            )
+        return {
+            'email':user.email,
+            # 'token': jwt_token
+        }
 
-    #     return super().validate(attrs)
 
-    # def create(self, validated_data):
-    #     password = validated_data.pop("password")
 
-    #     user = super().create(validated_data)
 
-    #     user.set_password(password) 
+class ClientLoginSerializer(serializers.Serializer):
+    pass
+    # email = serializers.CharField(max_length=255)
+    # password = serializers.CharField(max_length=128, write_only=True)
+    # token = serializers.CharField(max_length=255, read_only=True)
 
-    #     user.is_client = True
+    # def validate(self, data):
+    #     email = data.get("email", None)
+    #     password = data.get("password", None)
+    #     user = authenticate(email=email, password=password)
+    #     if user is None:
+    #         raise serializers.ValidationError(
+    #             'A user with this email and password is not found.'
+    #         )
 
-    #     user.save()
-
-    #     return user
+    #     if user.is_coach is False:
+    #         raise serializers.ValidationError(
+    #             'You are not registered coach'
+    #         )
+        
+        
+    #     try:
+    #         # payload = JWT_PAYLOAD_HANDLER(user)
+    #         # jwt_token = JWT_ENCODE_HANDLER(payload)
+    #         update_last_login(None, user)
+    #     except User.DoesNotExist:
+    #         raise serializers.ValidationError(
+    #             'User with given email and password does not exists'
+    #         )
+    #     return {
+    #         'email':user.email,
+    #         # 'token': jwt_token
+    #     }

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     "corsheaders",
     "djoser",
     "bulma",
@@ -142,7 +143,9 @@ REST_FRAMEWORK = {
     "NON_FIELD_ERRORS_KEY": "errors ",
     # The above code defines the default authentication class to be Token Authentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ),
     #  Default permission class to be IsAuthenticated meaning no API can be accessed by an unauthenticated user unless either he has a token or the permission class for that API has been defined to be AllowAny.
     'DEFAULT_PERMISSION_CLASSES': [
