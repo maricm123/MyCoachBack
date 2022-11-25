@@ -1,12 +1,15 @@
-from ..serializers.serializers_profiles import CoachSingUpSerializer, ClientSingUpSerializer, CoachLoginSerializer
+from ..serializers.serializers_profiles import CoachSingUpSerializer, ClientSingUpSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from profiles.tokens import create_jwt_pair_for_user
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+from django.contrib.auth import authenticate
+from django.contrib import messages
 
 class ClientSignUpView(generics.GenericAPIView):
     serializer_class = ClientSingUpSerializer
@@ -43,20 +46,25 @@ class CoachSignUpView(generics.GenericAPIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CoachLoginView(generics.GenericAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = CoachLoginSerializer
+class CoachLoginView(APIView):
+    permission_classes = []
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        response = {
-            'success' : 'True',
-            'status code' : status.HTTP_200_OK,
-            'message': 'User logged in  successfully',
-            # 'token' : serializer.data['token'],
-        }
+    def post(self, request: Request):
+        email = request.data.get("email")
+        password = request.data.get("password")
 
-        status_code = status.HTTP_200_OK
+        user = authenticate(email=email, password=password)
 
-        return Response(response, status = status_code)
+        if user is not None and user.is_coach == True:
+
+            tokens = create_jwt_pair_for_user(user)
+
+            response = {"message": "Login Successfull", "tokens": tokens}
+            return Response(data=response, status=status.HTTP_200_OK)
+        else:
+            return Response(data={"message": "Invalid email or password"})
+
+    def get(self, request: Request):
+        content = {"user": str(request.user), "auth": str(request.auth)}
+
+        return Response(data=content, status=status.HTTP_200_OK)

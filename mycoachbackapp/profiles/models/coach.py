@@ -11,3 +11,7 @@ class Coach(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        User.objects.filter(id=self.user.id).update(is_coach=True)
+        super().save(*args, **kwargs)
