@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from profiles.tokens import create_jwt_pair_for_user
 from rest_framework.permissions import AllowAny
+from rest_framework import permissions
+
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from django.contrib import messages
+import json
 
 class ClientSignUpView(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny, )
     serializer_class = ClientSingUpSerializer
 
     def post(self, request: Request):
@@ -27,6 +31,33 @@ class ClientSignUpView(generics.GenericAPIView):
             return Response(data=response, status=status.HTTP_201_CREATED)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ClientLoginView(APIView):
+    permission_classes = []
+
+    def post(self, request: Request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        user = authenticate(email=email, password=password)
+
+        if user is not None and user.is_client == True:
+            tokens = create_jwt_pair_for_user(user)
+
+            is_client = {
+                "is_client":str(user.is_client)
+            }
+
+            response = {"message": "Login Successfull", "tokens": tokens, "is_client":is_client}
+            return Response(data=response, status=status.HTTP_200_OK)
+        else:
+            return Response(data={"message": "Invalid email or password"})
+
+    def get(self, request: Request):
+        content = {"user": str(request.user), "auth": str(request.auth)}
+
+        return Response(data=content, status=status.HTTP_200_OK)
 
 class CoachSignUpView(generics.GenericAPIView):
     serializer_class = CoachSingUpSerializer
@@ -56,10 +87,13 @@ class CoachLoginView(APIView):
         user = authenticate(email=email, password=password)
 
         if user is not None and user.is_coach == True:
-
             tokens = create_jwt_pair_for_user(user)
 
-            response = {"message": "Login Successfull", "tokens": tokens}
+            is_coach = {
+                "is_coach":str(user.is_coach)
+            }
+
+            response = {"message": "Login Successfull", "tokens": tokens, "is_coach":is_coach}
             return Response(data=response, status=status.HTTP_200_OK)
         else:
             return Response(data={"message": "Invalid email or password"})

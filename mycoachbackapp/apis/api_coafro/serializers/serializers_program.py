@@ -22,6 +22,3 @@ class ProgramSerializer(serializers.ModelSerializer):
             'date_created',
             'modified_at'
         )
-
-
-        

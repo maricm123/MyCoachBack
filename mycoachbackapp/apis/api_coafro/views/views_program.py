@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from django.shortcuts import render
+from rest_framework import permissions
 from ..serializers.serializers_program import ProgramSerializer, CategorySerializer
 from profiles.models.coach import Coach
 from profiles.models.user import User
@@ -8,6 +9,7 @@ from trainingProgram.models.category import Category
 
 # Samo za listu svih programa
 class ProgramView(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny, )
     serializer_class = ProgramSerializer
     queryset = Program.objects.all()
 
