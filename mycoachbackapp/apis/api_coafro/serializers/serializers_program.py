@@ -11,7 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProgramSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    category = CategorySerializer()
     coach = CoachSerializer(read_only=True)
 
     class Meta:
@@ -22,3 +22,6 @@ class ProgramSerializer(serializers.ModelSerializer):
             'date_created',
             'modified_at'
         )
+
+    # def validate(self, data):
+    #     print(data)

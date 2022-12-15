@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+
 
 app_name = "config"
 
@@ -16,3 +18,10 @@ urlpatterns = [
     path("api/v1/", include('djoser.urls')),
     path("api/v1/", include('djoser.urls.authtoken')),
 ]
+
+
+
+if settings.DEBUG:
+    from rest_framework import urls as rest_urls
+    # Allow rest_framework login/logout views to test rest APIs
+    urlpatterns += [path("", include(rest_urls, namespace="rest_framework"))]

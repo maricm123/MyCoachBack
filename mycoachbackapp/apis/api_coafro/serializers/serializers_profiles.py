@@ -20,7 +20,7 @@ class CoachSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coach
-        fields = ['id', 'biography', 'user']
+        fields = ['id', 'biography', 'user', 'instagram']
 
 class CoachSingUpSerializer(serializers.ModelSerializer):
     password2=serializers.CharField(style={"input_type":"password"}, write_only=True)

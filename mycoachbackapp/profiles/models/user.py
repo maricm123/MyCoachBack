@@ -39,6 +39,7 @@ class User(
 ):
     email = models.CharField(max_length=80, unique=True)
     username = models.CharField(max_length=45)
+    phone = models.CharField(max_length=50, null=True, blank=True)
     is_client = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)
     
